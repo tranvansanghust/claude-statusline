@@ -1,0 +1,9 @@
+{
+  "name": "claude-statusline",
+  "version": "1.0.0",
+  "description": "Custom Claude Code statusline: folder, git branch, context usage bar, model, and 5h/7d rate limit usage",
+  "author": {
+    "name": "Sang Tran"
+  },
+  "keywords": ["statusline", "ui", "productivity"]
+}
