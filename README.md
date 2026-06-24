@@ -68,11 +68,14 @@ The script reads a JSON object on stdin that Claude Code provides on every promp
 ## Uninstall
 
 ```bash
-# Remove the script
-rm ~/.claude/statusline-command.sh
+# Remove the script and terminal-width file
+rm ~/.claude/statusline-command.sh ~/.claude/terminal-width
 
 # Remove statusLine from settings.json
 jq 'del(.statusLine)' ~/.claude/settings.json > /tmp/s.json && mv /tmp/s.json ~/.claude/settings.json
+
+# Remove the shell wrapper from ~/.zshrc (or ~/.bashrc)
+# Delete the 4 lines starting with "# claude-statusline"
 ```
 
 Then in Claude Code:
