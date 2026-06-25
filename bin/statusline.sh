@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Claude Code status line
-# Format: 📁 folder | 🌿 branch | 🧠 ctx% [bar] | 🤖 model | 5h: x% | 7d: y%
+# Line 1: 📁 folder | 🌿 branch | 🤖 model
+# Line 2: 🧠 ctx% [bar] | 5h: x% | 7d: y%
+#
+# Always split across two lines instead of relying on terminal soft-wrap —
+# Claude Code's statusline UI does not wrap a single long line, it truncates it.
 
 input=$(cat)
 
@@ -53,16 +57,25 @@ if [ -n "$seven_day" ]; then
     limit_part="${limit_part:+${limit_part} | }7d: ${seven_int}%"
 fi
 
-# Assemble — each segment on its own line if needed; terminal wraps naturally
-parts=("📁 ${dir}")
-[ -n "$git_part" ]   && parts+=("$git_part")
-[ -n "$ctx_part" ]   && parts+=("$ctx_part")
-[ -n "$model_part" ] && parts+=("$model_part")
-[ -n "$limit_part" ] && parts+=("$limit_part")
+# Line 1: identity (dir, branch, model)
+line1_parts=("📁 ${dir}")
+[ -n "$git_part" ]   && line1_parts+=("$git_part")
+[ -n "$model_part" ] && line1_parts+=("$model_part")
 
-result=""
-for p in "${parts[@]}"; do
-    result="${result:+${result} | }${p}"
+line1=""
+for p in "${line1_parts[@]}"; do
+    line1="${line1:+${line1} | }${p}"
 done
 
-printf "%s\n" "$result"
+# Line 2: usage (context bar, rate limits)
+line2_parts=()
+[ -n "$ctx_part" ]   && line2_parts+=("$ctx_part")
+[ -n "$limit_part" ] && line2_parts+=("$limit_part")
+
+line2=""
+for p in "${line2_parts[@]}"; do
+    line2="${line2:+${line2} | }${p}"
+done
+
+printf "%s\n" "$line1"
+[ -n "$line2" ] && printf "%s\n" "$line2"
